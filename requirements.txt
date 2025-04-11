@@ -1,0 +1,17 @@
+fastapi>=0.68.0
+uvicorn>=0.15.0
+sqlalchemy>=1.4.23
+asyncpg>=0.24.0
+psycopg2-binary>=2.9.1
+pydantic>=1.9.0
+jinja2>=3.0.1
+httpx>=0.18.2
+psutil>=5.8.0
+starlette>=0.14.2
+alembic>=1.7.1
+python-multipart>=0.0.5
+email-validator>=1.1.3
+redis
+passlib[bcrypt]
+databases[postgresql]
+python-dotenv

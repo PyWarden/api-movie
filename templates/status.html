@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie API Status</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --success: #2ecc71;
+            --warning: #f1c40f;
+            --danger: #e74c3c;
+            --background: #f5f6fa;
+            --text: #2c3e50;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-overview {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .status-operational {
+            background-color: var(--success);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .refresh-text {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Movie API Status</h1>
+            <p>Real-time system metrics</p>
+        </div>
+
+        <div class="status-overview card">
+            <div class="status-indicator status-operational" id="mainStatus"></div>
+            <h2 id="statusText">Operational</h2>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-label">Uptime</div>
+                <div class="metric-value" id="uptime">-</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">CPU Usage</div>
+                <div class="metric-value" id="cpu">-</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Memory Usage</div>
+                <div class="metric-value" id="memory">-</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Total Requests</div>
+                <div class="metric-value" id="requests">-</div>
+            </div>
+        </div>
+
+        <p class="refresh-text">Last updated: <span id="lastUpdated">-</span></p>
+    </div>
+
+    <script>
+        function updateStatus() {
+            fetch('/api/status')
+                .then(response => response.json())
+                .then(data => {
+                    // Update main status
+                    document.getElementById('statusText').textContent = 
+                        data.status.charAt(0).toUpperCase() + data.status.slice(1);
+                    document.getElementById('mainStatus').className = 
+                        `status-indicator status-${data.status}`;
+
+                    // Update metrics
+                    const hours = Math.floor(data.uptime / 3600);
+                    const minutes = Math.floor((data.uptime % 3600) / 60);
+                    document.getElementById('uptime').textContent = 
+                        `${hours}h ${minutes}m`;
+                    document.getElementById('cpu').textContent = 
+                        `${Math.round(data.system.cpu)}%`;
+                    document.getElementById('memory').textContent = 
+                        `${Math.round(data.system.memory)}%`;
+                    document.getElementById('requests').textContent = 
+                        data.requests.total;
+
+                    // Update last updated time
+                    document.getElementById('lastUpdated').textContent = data.last_updated;
+                });
+        }
+
+        // Update initially and then every 30 seconds
+        updateStatus();
+        setInterval(updateStatus, 30000);
+    </script>
+</body>
+</html>

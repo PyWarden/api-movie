@@ -1,0 +1,11 @@
+{
+  "email_config": {
+    "smtp_server": "smtp.yandex.ru",
+    "smtp_port": 587,
+    "sender_email": "@yandex.ru",
+    "app_password": "https://yandex.ru/support/yandex-360/customers/mail/ru/mail-clients/others"
+  },
+  "cloudflare_turnstile": {
+    "secret_key": "https://www.cloudflare.com/ru-ru/application-services/products/turnstile/"
+  }
+} 

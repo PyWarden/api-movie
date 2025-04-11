@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - MovieAPI</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/register.css">
+    <link rel="stylesheet" href="/static/css/modal.css">
+    <link rel="stylesheet" href="/static/css/notifications.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+    <!-- Blur Elements -->
+    <div class="blur-circle blur-1"></div>
+    <div class="blur-circle blur-2"></div>
+
+    <!-- Registration Form -->
+    <div class="register-container">
+        <a href="/" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            Вернуться на главную
+        </a>
+
+        <div class="register-box">
+            <div class="register-header">
+                <h1>Создайте аккаунт</h1>
+                <p>Получите доступ к мощному API для поиска фильмов</p>
+            </div>
+
+            <form id="registerForm" class="register-form">
+                <div class="form-group">
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" id="username" name="username" required 
+                           placeholder="Введите имя пользователя">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required 
+                           placeholder="example@domain.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <div class="password-input">
+                        <input type="password" id="password" name="password" required 
+                               placeholder="Минимум 8 символов">
+                        <i class="fas fa-eye-slash toggle-password"></i>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Подтвердите пароль</label>
+                    <div class="password-input">
+                        <input type="password" id="confirmPassword" name="confirmPassword" required 
+                               placeholder="Повторите пароль">
+                        <i class="fas fa-eye-slash toggle-password"></i>
+                    </div>
+                </div>
+
+                <!-- Cloudflare Turnstile -->
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAAA7WWgNRVb8U1IZY" data-theme="dark"></div>
+
+                <button type="submit" class="btn-register">
+                    Создать аккаунт
+                </button>
+
+                <div class="terms">
+                    Создавая аккаунт, вы соглашаетесь с нашими
+                    <a href="#">Условиями использования</a> и
+                    <a href="#">Политикой конфиденциальности</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/static/js/register.js"></script>
+</body>
+</html>

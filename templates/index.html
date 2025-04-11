@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieAPI | Powerful Movie Database</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Добавляем highlight.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        .code-tabs-content {
+            position: relative;
+            height: auto; /* Убираем фиксированную высоту */
+            max-height: 400px; /* Максимальная высота для очень длинного кода */
+            overflow: visible; /* Убираем скроллбар на контейнере */
+        }
+        
+        .code-content {
+            display: none;
+            position: relative;
+        }
+        
+        .code-content.active {
+            display: block;
+        }
+        
+        .tab-btn {
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            padding: 8px 16px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: #eee;
+            border-radius: 4px 4px 0 0;
+            margin-right: 4px;
+        }
+        
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+        
+        .tab-btn.active {
+            background-color: #1e2127; /* Более тёмный цвет фона */
+            color: #fff;
+            font-weight: 500;
+        }
+        
+        /* Стили для блоков кода */
+        .code-content {
+            background-color: #1e2127; /* Более тёмный и приятный фон */
+            border-radius: 0 0 6px 6px;
+            padding: 20px 0;
+        }
+        
+        .code-content code {
+            width: 100%;
+            padding: 0 15px;
+            overflow-x: auto;
+            background: transparent !important;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Убираем внутренние отступы в pre */
+        .code-content pre {
+            margin: 0;
+            padding: 0;
+            background: transparent !important;
+        }
+        
+        /* Стили для окна кода */
+        .code-window {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            margin-top: 10px;
+        }
+        
+        .window-header {
+            background: #1a1c21; /* Более тёмный фон для заголовка */
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .window-dots {
+            display: flex;
+            gap: 6px;
+            margin-right: 15px;
+        }
+        
+        .window-dots span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ff5f56;
+        }
+        
+        .window-dots span:nth-child(2) {
+            background-color: #ffbd2e;
+        }
+        
+        .window-dots span:nth-child(3) {
+            background-color: #27c93f;
+        }
+        
+        .window-title {
+            color: #ddd;
+            font-size: 14px;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        /* Улучшенная кнопка копирования */
+        .copy-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10;
+            opacity: 0.7;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        
+        .copy-btn i {
+            font-size: 16px;
+        }
+        
+        /* Стиль для оповещения о копировании */
+        .code-content.copied .copy-btn {
+            background: #27c93f !important;
+            opacity: 1;
+        }
+        
+        /* Скрываем стандартный скроллбар и добавляем красивый */
+        /* Для WebKit (Chrome, Safari, Opera) */
+        .code-content pre::-webkit-scrollbar {
+            height: 8px;
+            background-color: transparent;
+        }
+        
+        .code-content pre::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+        
+        .code-content pre::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Для Firefox */
+        .code-content pre {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+        
+        /* Стиль для example-tabs */
+        .example-tabs {
+            display: flex;
+            margin-bottom: -1px;
+        }
+        
+        /* Обновляем сетку тарифов для двух элементов */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(250px, 300px));
+            gap: 30px;
+            margin-top: 40px;
+            justify-content: center;
+        }
+        
+        /* Для мобильных устройств */
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: minmax(250px, 300px);
+            }
+        }
+        
+        /* Стили для FAQ */
+        .faq-item {
+            margin-bottom: 16px;
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.7); /* Делаем фон элемента темным */
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .faq-question:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .faq-question h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #fff;
+        }
+        
+        .faq-question i {
+            font-size: 16px;
+            color: #fff;
+            transition: transform 0.3s;
+        }
+        
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease;
+            color: #ddd; /* Возвращаем светлый текст */
+            line-height: 1.6;
+            background-color: transparent; /* Убираем белый фон */
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 0 20px 20px;
+            max-height: 500px;
+        }
+        
+        .faq-item.active .faq-question i {
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body>
+    <!-- Blur Elements -->
+    <div class="blur-circle blur-1"></div>
+    <div class="blur-circle blur-2"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">
+                <i class="fas fa-film"></i>
+                <span>MovieAPI</span>
+            </div>
+
+            <div class="nav-links">
+                <a href="/docs" class="nav-link">Документация</a>
+                <a href="#examples" class="nav-link">Примеры</a>
+                <a href="#pricing" class="nav-link">Цены</a>
+                <a href="/register" class="btn-primary">Получить API ключ</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Мощное API для<br>поиска фильмов</h1>
+                <p class="hero-subtitle">Простая интеграция. Быстрые ответы. Большая база данных.</p>
+
+                <!-- API Demo -->
+                <div class="api-demo">
+                    <div class="demo-header">
+                        <div class="endpoint-label">
+                            <span class="method">GET</span>
+                            <span class="endpoint">/api/v1/search</span>
+                        </div>
+                        <div class="response-time">~ 200ms</div>
+                    </div>
+
+                    <div class="demo-content">
+                        <pre class="code-block"><code>{
+  "query": "Inception",
+  "results": [
+    {
+      "title": "Inception",
+      "year": 2010,
+      "rating": 8.8,
+      "director": "Christopher Nolan",
+      "poster": "https://..."
+    }
+  ],
+  "total": 1,
+  "time": 0.192
+}</code></pre>
+                    </div>
+                </div>
+
+                <!-- API Stats -->
+                <div class="api-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">500K+</div>
+                        <div class="stat-label">Фильмов в базе</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">99.9%</div>
+                        <div class="stat-label">Uptime</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">&lt;200ms</div>
+                        <div class="stat-label">Среднее время ответа</div>
+                    </div>
+                </div>
+
+                <!-- Key Features -->
+                <div class="key-features">
+                    <div class="feature-card">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Быстрая интеграция</h3>
+                        <p>Начните использовать API за 5 минут</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Безопасность</h3>
+                        <p>SSL шифрование и API ключи</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-code"></i>
+                        <h3>REST API</h3>
+                        <p>Современный REST API с JSON</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Продолжение после hero section -->
+
+    <!-- Documentation Preview Section -->
+    <section class="docs-preview" id="examples">
+        <div class="container">
+            <div class="section-header">
+                <h2>Простая интеграция</h2>
+                <p>Начните использовать API за несколько минут</p>
+            </div>
+
+            <div class="code-examples">
+                <div class="example-tabs">
+                    <button class="tab-btn active" data-lang="js">JavaScript</button>
+                    <button class="tab-btn" data-lang="python">Python</button>
+                    <button class="tab-btn" data-lang="php">PHP</button>
+                </div>
+
+                <div class="code-window">
+                    <div class="window-header">
+                        <div class="window-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="window-title" id="code-window-title">example.js</div>
+                    </div>
+                    <div class="code-tabs-content">
+                        <div class="code-content active" data-lang="js">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                            <pre><code class="language-javascript">// Поиск фильма по названию
+const response = await fetch('https://api.movieapi.dev/v1/search', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  }
+});
+
+const data = await response.json();
+console.log(data);</code></pre>
+                        </div>
+                        
+                        <div class="code-content" data-lang="python">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                            <pre><code class="language-python">import requests
+
+# Поиск фильма по названию
+response = requests.get(
+    'https://api.movieapi.dev/v1/search',
+    headers={
+        'Authorization': 'Bearer YOUR_API_KEY',
+        'Content-Type': 'application/json'
+    }
+)
+
+data = response.json()
+print(data)</code></pre>
+                        </div>
+                        
+                        <div class="code-content" data-lang="php">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fas fa-copy"></i></button>
+                            <pre><code class="language-php"><?php
+// Поиск фильма по названию
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+    CURLOPT_URL => "https://api.movieapi.dev/v1/search",
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_HTTPHEADER => [
+        "Authorization: Bearer YOUR_API_KEY",
+        "Content-Type: application/json"
+    ]
+]);
+
+$response = curl_exec($curl);
+$data = json_decode($response, true);
+
+print_r($data);
+curl_close($curl);
+?></code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Огромная база данных</h3>
+                        <p>500,000+ фильмов и сериалов с постоянными обновлениями</p>
+                        <ul class="feature-list">
+                            <li>Ежедневные обновления</li>
+                            <li>Подробная информация</li>
+                            <li>Высокая точность</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Молниеносная скорость</h3>
+                        <p>Среднее время ответа менее 200ms с 99.9% uptime</p>
+                        <ul class="feature-list">
+                            <li>Глобальная CDN</li>
+                            <li>Кэширование</li>
+                            <li>Оптимизация запросов</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Безопасность</h3>
+                        <p>Современные стандарты безопасности и мониторинг</p>
+                        <ul class="feature-list">
+                            <li>SSL шифрование</li>
+                            <li>API ключи</li>
+                            <li>Rate limiting</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Тарифы</h2>
+                <p>Выберите подходящий план</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="card-header">
+                        <h3>Starter</h3>
+                        <div class="price">
+                            <span class="amount">0 ₽</span>
+                            <span class="period">/месяц</span>
+                        </div>
+                    </div>
+                    <div class="card-features">
+                        <ul>
+                            <li>
+                                <i class="fas fa-check"></i>
+                                1,000 запросов/месяц
+                            </li>
+                            <li>
+                                <i class="fas fa-check"></i>
+                                Базовый поиск
+                            </li>
+                            <li>
+                                <i class="fas fa-check"></i>
+                                Документация
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="btn-subscribe">Начать бесплатно</button>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="card-header">
+                        <h3>Pro</h3>
+                        <div class="price">
+                            <span class="amount">790 ₽</span>
+                            <span class="period">/месяц</span>
+                        </div>
+                    </div>
+                    <div class="card-features">
+                        <ul>
+                            <li>
+                                <i class="fas fa-check"></i>
+                                Неограниченные запросы
+                            </li>
+                            <li>
+                                <i class="fas fa-check"></i>
+                                SLA
+                            </li>
+                            <li>
+                                <i class="fas fa-check"></i>
+                                24/7 поддержка
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="btn-subscribe">Связаться с нами</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<!-- Integration Section -->
+<section class="integration">
+    <div class="container">
+        <div class="integration-content">
+            <div class="integration-text">
+                <h2>Готовы начать?</h2>
+                <p>Получите доступ к крупнейшей базе фильмов через современное API</p>
+                <div class="integration-btns">
+                    <a href="/register" class="btn-primary">Получить API ключ</a>
+                    <a href="/docs" class="btn-secondary">Документация <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="integration-stats">
+                <div class="stat-circle">
+                    <svg viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" class="circle-bg"/>
+                        <circle cx="50" cy="50" r="45" class="circle-progress"/>
+                    </svg>
+                    <div class="stat-content">
+                        <span class="stat-number">99.9%</span>
+                        <span class="stat-label">Uptime</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-logo">
+                    <i class="fas fa-film"></i>
+                    <span>MovieAPI</span>
+                </div>
+                <p>Powerful Movie Database API</p>
+                <div class="footer-social">
+                    <a href="https://github.com/PyWarden"><i class="fab fa-github"></i></a>
+                    <a href="https://t.me/qzqwx"><i class="fab fa-telegram"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Продукт</h4>
+                    <ul>
+                        <li><a href="#">API</a></li>
+                        <li><a href="#">Тарифы</a></li>
+                        <li><a href="/docs">Документация</a></li>
+                        <li><a href="#">Статус</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Компания</h4>
+                    <ul>
+                        <li><a href="#">О нас</a></li>
+                        <li><a href="#">Блог</a></li>
+                        <li><a href="#">Карьера</a></li>
+                        <li><a href="#">Контакты</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Поддержка</h4>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Обратная связь</a></li>
+                        <li><a href="#">База знаний</a></li>
+                        <li><a href="#">API Status</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 MovieAPI. Все права защищены.</p>
+            <div class="footer-bottom-links">
+                <a href="#">Условия использования</a>
+                <a href="#">Политика конфиденциальности</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const codeContents = document.querySelectorAll('.code-content');
+    const windowTitle = document.getElementById('code-window-title');
+    
+    const filenames = {
+        'js': 'example.js',
+        'python': 'example.py',
+        'php': 'example.php'
+    };
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const lang = button.getAttribute('data-lang');
+            
+            // Активировать кнопку вкладки
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            
+            // Показать соответствующий код
+            codeContents.forEach(content => {
+                if (content.getAttribute('data-lang') === lang) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+            
+            // Обновить заголовок окна
+            windowTitle.textContent = filenames[lang];
+        });
+    });
+    
+    // Инициализация подсветки синтаксиса
+    document.querySelectorAll('.code-content code').forEach(block => {
+        hljs.highlightElement(block);
+    });
+    
+    // Добавляем обработчик для FAQ
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        const answer = item.querySelector('.faq-answer');
+        const icon = question.querySelector('i');
+        
+        question.addEventListener('click', () => {
+            // Переключаем активный класс
+            item.classList.toggle('active');
+            
+            // Меняем иконку
+            if (item.classList.contains('active')) {
+                icon.classList.remove('fa-plus');
+                icon.classList.add('fa-minus');
+            } else {
+                icon.classList.remove('fa-minus');
+                icon.classList.add('fa-plus');
+            }
+        });
+    });
+});
+
+// Функция копирования кода
+function copyCode(button) {
+    // Находим код, который нужно скопировать
+    const codeBlock = button.nextElementSibling.querySelector('code');
+    const code = codeBlock.textContent;
+    
+    // Создаем временный элемент textarea для копирования
+    const textarea = document.createElement('textarea');
+    textarea.value = code;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'absolute';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    
+    // Выбираем текст и копируем
+    textarea.select();
+    document.execCommand('copy');
+    
+    // Удаляем временный элемент
+    document.body.removeChild(textarea);
+    
+    // Показываем успешное копирование
+    const codeContent = button.closest('.code-content');
+    
+    // Изменяем иконку на галочку
+    const icon = button.querySelector('i');
+    icon.classList.remove('fa-copy');
+    icon.classList.add('fa-check');
+    
+    // Добавляем класс для стилизации
+    codeContent.classList.add('copied');
+    
+    // Через 1.5 секунды возвращаем обратно
+    setTimeout(() => {
+        icon.classList.remove('fa-check');
+        icon.classList.add('fa-copy');
+        codeContent.classList.remove('copied');
+    }, 1500);
+}
+</script>
+
+<!-- Подключаем highlight.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<!-- Дополнительные языки, если нужны -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js"></script>
+</body>
+</html>

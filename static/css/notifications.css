@@ -1,0 +1,109 @@
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 16px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    max-width: 400px;
+    width: calc(100% - 40px);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 16px;
+}
+
+.notification-message {
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.notification-close {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px;
+    margin: -4px;
+    transition: color 0.2s ease;
+}
+
+.notification-close:hover {
+    color: var(--text);
+}
+
+/* Типы уведомлений */
+.notification.error {
+    border-left: 4px solid #ef4444;
+}
+
+.notification.error .notification-icon {
+    color: #ef4444;
+}
+
+.notification.warning {
+    border-left: 4px solid #f59e0b;
+}
+
+.notification.warning .notification-icon {
+    color: #f59e0b;
+}
+
+.form-error {
+    color: #ef4444;
+    font-size: 14px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    animation: slideDown 0.3s ease forwards;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.error-input {
+    border-color: #ef4444 !important;
+}
+
+.error-input:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
