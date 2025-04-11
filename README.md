@@ -34,7 +34,7 @@
 
 1.  **Клонируйте репозиторий:**
     ```bash
-    git clone https://github.com/your-username/movie-api.git
+    git clone https://github.com/PyWarden/api-movie.git
     cd movie-api
     ```
 2.  **Создайте файл конфигурации:**
