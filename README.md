@@ -1,4 +1,3 @@
-# api-movie
 ![Демонстрация](https://github.com/user-attachments/assets/ff8704f4-d5b4-4edc-bb29-64169cbe0fdd)
 
 # 🎬 Movie API (FastAPI)
@@ -39,7 +38,7 @@
     cd movie-api
     ```
 2.  **Создайте файл конфигурации:**
-    Заполните файлы config.json
+    Заполните файл config.json
 
 3.  **Запустите с помощью Docker Compose:**
     ```bash
